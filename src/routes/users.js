@@ -6,6 +6,11 @@ router.post('/users',  (req, res) => {
 
 });
 
+//login
+router.post('/users/login', (req, res) => {
+
+})
+
 //read receita
 router.get('/users', (req, res) => {
 
@@ -15,7 +20,6 @@ router.get('/users', (req, res) => {
 router.patch('/users', (req, res) => {
 
 })
-
 
 //remove usuário
 router.delete('/users', () => {
