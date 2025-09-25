@@ -43,6 +43,14 @@ userEsquema.pre('save', async function (next) {
     next();
 });
 
+userEsquema.methods.toJSON = function () {
+    const userObj =  this.toObject();
+    delete userObj.senha;
+    delete userObj.tokens;
+
+    return userObj;
+}
+
 userEsquema.statics.encontrarPorCredenciais = async function(credenciaisObj) {
     const comparativos = ['email', 'senha'];
     const reqKeys = Object.keys(credenciaisObj);

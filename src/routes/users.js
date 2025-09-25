@@ -6,6 +6,11 @@ const auth = require('../middlewares/auth.js');
 
 //create user
 router.post('/users',  (req, res) => {
+    const conferirArr = ['nome', 'email', 'senha'];
+    const conferir = conferirArr.every(x=> Object.keys(req.body).includes(x)); 
+
+    if (!conferir) return  !res.status(400).json({erro: 'Informe os argumentos corretos'});
+
     try {
         const user = new User(req.body)
         res.status(201).json(user);
@@ -13,6 +18,7 @@ router.post('/users',  (req, res) => {
         res.status(400).json({erro: e.message})
     }
 });
+
 
 //login
 router.post('/users/login', async (req, res) => {
@@ -28,15 +34,7 @@ router.post('/users/login', async (req, res) => {
 
 })
 
-//read receita
-router.get('/users', (req, res) => {
 
-})
-
-//update informações
-router.patch('/users', (req, res) => {
-
-})
 
 //remove usuário
 router.delete('/users', auth, async (req, res) => {
