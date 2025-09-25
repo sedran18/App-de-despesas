@@ -7,8 +7,8 @@ const User = require('../models/users.js');
 //criar transaçao
 router.post('/transacoes', auth, async (req, res)=> {
     const verificar = ['descricao', 'valor', 'tipo', 'categoria', 'data'];
-    const keys = Ovject.keys(req.body);
-    if (!keys.every(x => verificar.includes(x))) return !res.status(400).json({erro: 'Informe os argumentos corretos'});
+    const keys = Object.keys(req.body);
+    if (!keys.every(x => verificar.includes(x))) return res.status(400).json({erro: 'Informe os argumentos corretos'});
 
 
     try {
@@ -45,9 +45,14 @@ router.get('/transacoes', auth, async (req, res) => {
 });
 
 //read categorias
-router.get('/transacoes/categorias', auth, (req, res) => {
-
-})
+router.get('/transacoes/categorias', auth, async (req, res) => {
+    try {
+        const arrDeCategorias = await Transacao.distinct('categoria', {user: req.user._id});
+        res.json(arrDeCategorias);
+    } catch (err) {
+        res.status(500).json({error: 'Erro ao recuperar categorias'})
+    }
+});
 
 
 
