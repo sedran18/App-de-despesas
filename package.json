@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "description": "App de controle de despesas",
   "license": "ISC",
-  "author": "Sedran18",
+  "author": "sedran",
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/index.js",
-    "test": "jest"
+    "test": "jest",
+    "start": "node src/index.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

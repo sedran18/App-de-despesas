@@ -53,10 +53,10 @@ userEsquema.methods.toJSON = function () {
 }
 
 userEsquema.statics.encontrarPorCredenciais = async function(credenciaisObj) {
-    const comparativos = ['email', 'senha'];
-    const reqKeys = Object.keys(credenciaisObj);
+    const camposPermitidos = ['email', 'senha'];
+    const camposEnviados = Object.keys(credenciaisObj);
 
-    const verificarChavesDoUser = reqKeys.every(key => comparativos.includes(key));
+    const verificarChavesDoUser = camposEnviados.every(key => camposPermitidos.includes(key));
     if (!verificarChavesDoUser) {
         throw new Error('Informações inseridas incorretamente');
     }
