@@ -29,12 +29,11 @@ const loginUsuario = async (req, res) => {
     }
 
     try {
-        const user =await  User.encontrarPorCredenciais({email, senha});
+        const user = await  User.encontrarPorCredenciais(req.body);
         const token = await user.gerarToken();
         res.json({user, token})
     } catch (err) {
         res.status(400).json('Login mal sucedido');
-        console.error(err);
     }
 }
 
