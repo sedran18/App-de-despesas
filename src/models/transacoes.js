@@ -34,7 +34,7 @@ const esquemaTransacoes = new mongoose.Schema({
     }
 });
 
-esquemaTransacoes.statics.procurarPorDataCategoriaETipo = async function (userId, ano, mes, categoria, tipo) {
+esquemaTransacoes.statics.procurarPorDataCategoriaETipo = function (userId, ano, mes, categoria, tipo) {
 
     const dataInicio = new Date(ano, mes - 1, 1);
     const dataFim = new Date(ano, mes, 0, 23, 59, 59, 999);
@@ -44,6 +44,7 @@ esquemaTransacoes.statics.procurarPorDataCategoriaETipo = async function (userId
         data: { $gte: dataInicio, $lte: dataFim },
         user: userId
     };
+
     if (categoria) {
         filtro.categoria = categoria.toLowerCase(); // garante que seja lowercase se você quiser normalizar
     }

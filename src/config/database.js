@@ -8,4 +8,4 @@ const conectarAoBancoDEDados = async () => {
         console.error('Erro ao conectar com o banco de dados: ', e);
     }
 }
-module.exports = {conectarAoBancoDEDados};
+module.exports = conectarAoBancoDEDados;

@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Transacao = require('../models/transacoes.js');
 const auth = require('../middlewares/auth.js');
-const User = require('../models/users.js');
 
 //criar transaçao
 router.post('/transacoes', auth, async (req, res)=> {
@@ -30,7 +29,7 @@ router.post('/transacoes', auth, async (req, res)=> {
         await transacao.save();
         res.status(201).json({transacao})
     } catch (err) {
-        res.status(500).json({error: 'Erro ao criar transação'});
+        res.status(500).json({error: err.message});
     }
 
 });
@@ -47,11 +46,11 @@ router.get('/transacoes', auth, async (req, res) => {
         
         const transacoes = await Transacao.procurarPorDataCategoriaETipo(req.user._id, ano, mes, categoria, tipo)
             .limit(req.query.limit ? parseInt(req.query.limit) : 10)
-            .skip(req.query.skip ? parseInt(req.query.skip) : 0);
+            .skip(req.query.skip ? parseInt(req.query.skip) : 0).sort({date: -1});
 
         res.json(transacoes);
     } catch (err) {
-        res.status(500).json({ erro: 'Erro ao mostrar transações' });
+        res.status(500).json({ erro: err.message});
     }
 });
 
@@ -61,10 +60,34 @@ router.get('/transacoes/categorias', auth, async (req, res) => {
         const arrDeCategorias = await Transacao.distinct('categoria', {user: req.user._id});
         res.json(arrDeCategorias);
     } catch (err) {
-        res.status(500).json({error: 'Erro ao recuperar categorias'})
+        res.status(500).json({error: err.message})
     }
 });
 
+//update/replace categoria
+router.patch('/transacoes/categorias', auth, async (req, res) => {
+    
+    const { antigaCategoria, novaCategoria } = req.body;
+    if (!antigaCategoria || !novaCategoria) {
+        return res.status(400).json({ erro: 'Você precisa informar a categoria antiga e a nova' });
+    }
+
+
+    try {
+        const result = await Transacao.updateMany(
+            { categoria: antigaCategoria.toLowerCase(), user: req.user._id},
+            { $set: { categoria: novaCategoria.toLowerCase() } },
+            { runValidators: true } 
+        );
+
+        res.json({
+            mensagem: 'Categoria atualizada com sucesso',
+            documentosAfetados: result.modifiedCount
+        });
+    } catch (err) {
+        res.status(500).json({ erro: err.message });
+    }
+});
 
 
 //update informações pelo id;
@@ -96,43 +119,20 @@ router.patch('/transacoes/:id', auth, async (req, res) => {
     
 });
 
-//update/replace categoria
-router.patch('/transacoes/categorias', async (req, res) => {
-    const { antigaCategoria, novaCategoria } = req.body;
-
-    if (!antigaCategoria || !novaCategoria) {
-        return res.status(400).json({ erro: 'Você precisa informar a categoria antiga e a nova' });
-    }
-
-    try {
-        const result = await Transacao.updateMany(
-            { categoria: antigaCategoria.toLowerCase() },
-            { $set: { categoria: novaCategoria.toLowerCase() } },
-            { runValidators: true } 
-        );
-
-        res.json({
-            mensagem: 'Categoria atualizada com sucesso',
-            documentosAfetados: result.modifiedCount
-        });
-    } catch (err) {
-        res.status(500).json({ erro: err.message });
-    }
-});
 
 
 
 //apagar transação
 // Apaga por ID
 router.delete('/transacoes/:id', auth, async (req, res) => {
-    const apagado = await Transacao.deleteOne({ _id: req.params.id, user: req.user._id });
-    if (apagado.deletedCount === 0) return res.status(404).json({ erro: 'Transação não encontrada' });
-    res.json({ mensagem: 'Transação apagada com sucesso'});
+    const aApagar = await Transacao.findOne({ _id: req.params.id, user: req.user._id});
+    const apagado = await aApagar.deleteOne();
+    res.json({ mensagem: 'Transação apagada com sucesso', transacao: aApagar});
 });
 
-router.delete('/transacoes/categorias/', auth, async (req, res) => {
-    const apagados = await Transacao.deleteMany({ categoria: req.query.categoria.toLowerCase(), user: req.user._id });
-    res.json({ mensagem: 'Elementos apagados com sucesso', documentosApagados: apagados.deletedCount });
+router.delete('/transacoes/categorias/:categoria', auth, async (req, res) => {
+    const apagados = await Transacao.deleteMany({ categoria: req.params.categoria.toLowerCase(), user: req.user._id });
+    res.json({ mensagem: 'Elementos apagados com sucesso', documentosApagados: apagados.deletedCount, categoria: req.params.categoria});
 });
 
 

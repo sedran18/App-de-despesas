@@ -1,18 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/users.js');
+const Transacao = require('../models/transacoes.js');
 const auth = require('../middlewares/auth.js');
 
 
 //create user
-router.post('/users',  (req, res) => {
+router.post('/users',  async (req, res) => {
     const conferirArr = ['nome', 'email', 'senha'];
     const conferir = conferirArr.every(x=> Object.keys(req.body).includes(x)); 
+    console.log('POST')
 
     if (!conferir) return  !res.status(400).json({erro: 'Informe os argumentos corretos'});
 
     try {
-        const user = new User(req.body)
+        const user = new User(req.body);
+        await user.save();
         res.status(201).json(user);
     } catch (e) {
         res.status(400).json({erro: e.message})
@@ -40,6 +43,7 @@ router.post('/users/login', async (req, res) => {
 router.delete('/users', auth, async (req, res) => {
     try {
         await req.user.deleteOne();
+        await Transacao.deleteMany({user: req.user._id});
         res.json(req.user);
     } catch (e) {
         res.status(500).json({erro: e.message});

@@ -47,6 +47,7 @@ userEsquema.methods.toJSON = function () {
     const userObj =  this.toObject();
     delete userObj.senha;
     delete userObj.tokens;
+    delete userObj._id;
 
     return userObj;
 }

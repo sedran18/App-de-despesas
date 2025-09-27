@@ -1,7 +1,7 @@
 require('dotenv').config()
 const express = require('express');
-require('./config/database.js');
-
+const conectarAoBancoDEDados = require('./config/database.js');
+conectarAoBancoDEDados();
 const users =  require('./routes/users.js');
 const transacoes = require('./routes/transacoes.js');
 
