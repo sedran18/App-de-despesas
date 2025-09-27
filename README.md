@@ -51,7 +51,7 @@ Siga os passos abaixo para executar o projeto localmente.
 
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/sedran18/App-de-despesas.git](https://github.com/sedran18/App-de-despesas.git)
+    git clone https://github.com/sedran18/App-de-despesas.git
     cd nome-do-diretorio
     ```
 
