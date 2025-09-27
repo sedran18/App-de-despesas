@@ -57,6 +57,46 @@ describe('Usuários', () => {
         expect(res.statusCode).toBe(400);
     });
 
+    it('logout Usuário', async () => {
+        const user = await request(app).post('/api/users').send({
+            nome: 'Gabriel',
+            email: 'gabriel@gmail.com',
+            senha: '12345678'
+        });
+         
+        const token = user.body.token;
+
+        const res = await request(app).post('/api/users/logout').set('Authorization', `Bearer ${token}`);
+        expect(res.statusCode).toBe(200);
+    });
+
+    it('logout todos usuários', async () => {
+        const user = await request(app).post('/api/users').send({
+            nome: 'Gabriel',
+            email: 'gabriel@gmail.com',
+            senha: '12345678'
+        });
+         
+        const token = user.body.token;
+
+        const res = await request(app).post('/api/users/logoutAll').set('Authorization', `Bearer ${token}`);
+
+        expect(res.statusCode).toBe(200);
+    })
+
+     
+    it('verPerfil', async () => {
+        const user = await request(app).post('/api/users').send({
+            nome: 'Gabriel',
+            email: 'gabriel@gmail.com',
+            senha: '12345678'
+        });
+         
+        const token = user.body.token;
+
+        const res = await request(app).get('/api/users/me').set('Authorization', `Bearer ${token}`);
+        expect(res.statusCode).toBe(200);
+    });
 
 
     it('atualizar dados', async () => {

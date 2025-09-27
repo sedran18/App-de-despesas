@@ -1,138 +1,200 @@
-API de Controle Financeiro
+
+# App de despesas
+
 Esta é uma API RESTful desenvolvida em Node.js para o gerenciamento de finanças pessoais. A aplicação permite que os usuários se cadastrem, autentiquem e controlem suas transações financeiras (receitas e despesas), obtendo resumos e análises sobre seus gastos.
 
-✨ Funcionalidades Principais
-Autenticação Segura: Cadastro de usuários e autenticação baseada em JSON Web Tokens (JWT). Ao criar um novo usuário ou fazer login, um token de acesso é retornado para ser usado em rotas protegidas.
+## ✨ Funcionalidades Principais
 
-CRUD de Transações: Funcionalidades completas para Criar, Ler, Atualizar e Deletar transações financeiras.
+* **Autenticação Segura:** Cadastro e login de usuários com autenticação baseada em JSON Web Tokens (JWT).
+* **CRUD de Transações:** Funcionalidades completas para Criar, Ler, Atualizar e Deletar transações financeiras.
+* **Resumo Financeiro Inteligente:** A rota de listagem de transações retorna um resumo completo do período, contendo:
+    * Total de receitas e despesas.
+    * Saldo final.
+    * Análise de gastos com o **percentual detalhado por categoria**.
+* **Filtros Avançados:** A listagem de transações pode ser filtrada dinamicamente via *query params* (mês, ano, tipo ou categoria).
 
-Resumo Financeiro Inteligente: A rota de listagem de transações retorna, além da lista, um resumo completo do período, contendo:
+## 📂 Estrutura do Projeto
+```bash
+/
+├── src/
+│   ├── controllers/    # Lógica de controle das rotas
+│   ├── middlewares/    # Middlewares (ex: autenticação)
+│   ├── models/         # Modelos e esquemas do Mongoose
+│   ├── routes/         # Definição das rotas da API
+│   └── index.js        # Arquivo principal da aplicação Express
+├── tests/              # Testes automatizados
+├── .env                # Arquivo para variáveis de ambiente
+└── package.json
+```
 
-Total de receitas.
+## 🚀 Tecnologias Utilizadas
 
-Total de despesas.
+* **Node.js**: Ambiente de execução JavaScript.
+* **Express.js**: Framework para a construção da API.
+* **MongoDB**: Banco de dados NoSQL.
+* **Mongoose**: ODM para modelagem dos objetos do MongoDB.
+* **JWT (jsonwebtoken)**: Para geração e verificação de tokens.
+* **Jest & Supertest**: Para a escrita e execução de testes.
+* **dotenv**: Para gerenciamento de variáveis de ambiente.
 
-Saldo (diferença entre receitas e despesas).
+## ⚙️ Instalação e Configuração
 
-Análise de gastos com o percentual detalhado por categoria.
-
-Filtros Avançados: A listagem de transações pode ser filtrada dinamicamente através de query params, permitindo consultas por mês, ano, tipo ou categoria.
-
-🚀 Tecnologias Utilizadas
-Node.js: Ambiente de execução JavaScript.
-
-Express.js: Framework para a construção da API.
-
-MongoDB: Banco de dados NoSQL para armazenamento dos dados.
-
-Mongoose: ODM para modelagem dos objetos do MongoDB.
-
-JWT (jsonwebtoken): Para geração e verificação de tokens de autenticação.
-
-Jest & Supertest: Para a escrita e execução de testes automatizados.
-
-dotenv: Para gerenciamento de variáveis de ambiente.
-
-⚙️ Instalação e Configuração
 Siga os passos abaixo para executar o projeto localmente.
 
-Pré-requisitos:
+**Pré-requisitos:**
 
-Node.js (v16 ou superior)
+* Node.js (v16 ou superior)
+* NPM ou Yarn
+* MongoDB (instância local ou um cluster na nuvem)
 
-NPM ou Yarn
+**Passos:**
 
-MongoDB (uma instância local ou um cluster na nuvem como o MongoDB Atlas)
+1.  **Clone o repositório:**
+    ```bash
+    git clone [https://URL-DO-SEU-REPOSITORIO.git](https://URL-DO-SEU-REPOSITORIO.git)
+    cd nome-do-diretorio
+    ```
 
-Passos:
+2.  **Instale as dependências:**
+    ```bash
+    npm install
+    ```
 
-Clone o repositório:
+3.  **Configure as variáveis de ambiente:**
+    Crie um arquivo `.env` na raiz do projeto, utilizando o modelo abaixo:
 
-Bash
+    ```env
+    # Porta em que a aplicação será executada
+    PORT=3000
 
-git clone https://URL-DO-SEU-REPOSITORIO.git
-cd nome-do-diretorio
-Instale as dependências:
+    # URI de conexão com o banco de dados MongoDB
+    MONGODB_URI=mongodb://localhost:27017/finance-app
 
-Bash
+    # Chave secreta para a assinatura dos tokens JWT
+    JWT_SECRET=suaChaveSuperSecretaAqui
+    ```
 
-npm install
-Configure as variáveis de ambiente:
-Crie um arquivo chamado .env na raiz do projeto, copiando o conteúdo do arquivo .env.example (se houver) ou usando o modelo abaixo:
+## ▶️ Executando a Aplicação
 
-Snippet de código
+* **Modo de desenvolvimento:**
+    ```bash
+    npm run dev
+    ```
 
-# Porta em que a aplicação será executada
-PORT=3000
+* **Modo de produção:**
+    ```bash
+    npm start
+    ```
 
-# URI de conexão com o banco de dados MongoDB
-MONGODB_URI=mongodb://localhost:27017/finance-app
+## 🧪 Executando os Testes
 
-# Chave secreta para a assinatura dos tokens JWT
-JWT_SECRET=suaChaveSuperSecretaAqui
-▶️ Executando a Aplicação
-Para iniciar o servidor em modo de desenvolvimento (com nodemon, se configurado):
-
-Bash
-
-npm run dev
-Para iniciar o servidor em modo de produção:
-
-Bash
-
-npm start
-🧪 Executando os Testes
-Para rodar a suíte de testes automatizados e verificar a integridade da aplicação, execute:
-
-Bash
-
+```bash
 npm test
-📖 Documentação da API
-Autenticação
-POST /api/users - Criar novo usuário
-Cria um novo usuário e retorna os dados do usuário junto com um token de autenticação.
+```
+## 📖 Documentação da API
+**Autenticação**
 
-Corpo da Requisição:
+```POST /api/users``` **- Criar novo usuário**
+Cria um novo usuário e retorna seus dados junto com um token de autenticação.
 
-JSON
+**Corpo da Requisição:**
+
+```JSON
 
 {
     "nome": "Gabriel",
     "email": "gabriel@gmail.com",
     "senha": "12345678"
 }
-Resposta de Sucesso (201 Created):
+```
+**Resposta de Sucesso (201 Created):**
 
-JSON
+```JSON
 
 {
     "user": {
-        "_id": "68d838efa4e6e789fe2a04d8",
         "nome": "Gabriel",
         "email": "gabriel@gmail.com"
     },
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
-Transações (Rota Protegida)
-GET /api/transacoes - Listar transações com resumo
-Retorna uma lista de transações do usuário autenticado e um resumo financeiro.
+```
+```POST /api/users/login``` **- Login de usuário**
 
-Filtros (Query Params):
+Autentica um usuário existente e retorna um novo token.
 
-mes (Number): Filtra as transações por um mês específico (ex: mes=9 para Setembro).
+**Corpo da Requisição:**
 
-ano (Number): Filtra as transações por um ano específico (ex: ano=2025).
+```JSON
 
-tipo (String): Filtra por receita ou despesa.
+{
+    "email": "gabriel@gmail.com",
+    "senha": "12345678"
+}
+```
+**Resposta de Sucesso (200 OK):**
 
-categoria (String): Filtra por uma categoria exata (ex: categoria=lazer).
+```JSON
 
-Exemplo de Uso:GET /api/transacoes?ano=2025&mes=9&tipo=despesa
+{
+    "user": {
+        "nome": "Gabriel",
+        "email": "gabriel@gmail.com"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
 
-Resposta de Sucesso (200 OK):
+```POST /api/users/me``` **- Ver dados do usuário**
 
-JSON
+Retorna dados seguros do usuário (Necessita autenticação).
 
+```JSON
+{
+    "user": {
+        "nome": "Gabriel",
+        "email": "gabriel@gmail.com"
+    }
+}
+``` 
+
+```POST /api/users/logout``` **- Remove token**
+
+Remove token (enviado no header) da autenticação.
+
+
+```POST /api/users/logoutAll``` **- Remove todos os tokens**
+
+Remove todos os tokens do usuário (Necessita autenticação).
+
+``` 
+**Transações (Rota Protegida)**
+
+Lembrando que todas as requisições tem que ser autenticada via token, adicionando Bearer <token> no header Authentication.
+
+```GET /api/transacoes``` **- Listar transações com resumo**
+
+Retorna as transações do usuário e um resumo financeiro, com possibilidade de filtros.
+
+**Filtros (Query Params):**
+
+* mes (Number): Filtra por um mês específico (ex: mes=9).
+
+* ano (Number): Filtra por um ano específico (ex: ano=2025).
+
+* tipo (String): Filtra por receita ou despesa.
+
+* categoria (String): Filtra por uma categoria exata.
+
+**Exemplo de Uso:**
+
+```HTTP
+GET /api/transacoes?ano=2025&mes=9&tipo=despesa
+```
+
+**Resposta de Sucesso (200 OK):**
+
+```JSON
 {
     "transacoes": [
         {
@@ -141,8 +203,7 @@ JSON
             "valor": 50,
             "tipo": "despesa",
             "categoria": "lazer",
-            "data": "2025-09-27T19:28:37.869Z",
-            "user": "68d838efa4e6e789fe2a04d8"
+            "data": "2025-09-27T19:28:37.869Z"
         }
     ],
     "resumo": {
@@ -156,16 +217,108 @@ JSON
         "saldo": 2449.50
     }
 }
-POST /api/transacoes - Criar nova transação
-Adiciona uma nova transação (receita ou despesa) para o usuário autenticado.
+```
 
-Corpo da Requisição:
+```GET /api/transacoes/categorias``` **- Listar categorias adicionadas**
 
-JSON
+Retorna um array listando todas as categorias adicionadas no banco de dados.
+```JSON
+["alimentação", "transporte", "salário"]
+```
+```POST /api/transacoes``` **- Criar nova transação**
 
+Adiciona uma nova transação para o usuário autenticado.
+
+**Corpo da Requisição:**
+
+```JSON
 {
     "descricao": "Salário",
     "valor": 3000,
     "tipo": "receita",
     "categoria": "trabalho"
 }
+```
+**Resposta de Sucesso (201 Created):**
+
+```JSON
+{
+    "_id": "novoIdDaTransacao",
+    "descricao": "Salário",
+    "valor": 3000,
+    "tipo": "receita",
+    "categoria": "trabalho",
+    "data": "2025-09-27T20:00:00.000Z"
+}
+```
+```PATCH /api/transacoes/:id``` **- Atualizar uma transação**
+
+Atualiza uma transação existente pelo seu ID.
+
+**Corpo da Requisição (apenas os campos a serem alterados):**
+
+```JSON
+
+{
+    "valor": 3500,
+    "descricao": "Salário com aumento"
+}
+```
+**Resposta de Sucesso (200 OK):**
+
+```JSON
+{
+    "_id": "idDaTransacao",
+    "descricao": "Salário com aumento",
+    "valor": 3500,
+    "tipo": "receita",
+    "categoria": "trabalho",
+    "data": "2025-09-27T20:00:00.000Z"
+}
+```
+
+```PATCH /api/transacoes``` **- Renomear uma categoria**
+
+Renomeia uma categoria
+
+**Corpo da Requisição:**
+
+```JSON
+{ "antigaCategoria": "freelancer", "novaCategoria": "salario" }
+```
+
+**Resposta de Sucesso (200 OK):**
+
+```JSON
+{
+    "mensagem": "Categoria atualizada com sucesso",
+    "documentosAfetados": 4
+}
+```
+
+```DELETE /api/transacoes/:id``` **- Deletar uma transação**
+
+Remove uma transação pelo seu ID.
+
+**Resposta de Sucesso (200 OK):**
+
+```JSON
+{
+    "mensagem": "Transação apagada com sucesso"
+}
+```
+
+
+```DELETE /api/transacoes/:categoria``` **- Deletar uma transação por categoria**
+
+Remove uma transação pela sua categoria.
+
+**Resposta de Sucesso (200 OK):**
+
+```JSON
+{
+    "mensagem": "Transação apagada com sucesso"
+}
+```
+## ⚖️ Licença
+Este projeto está licenciado sob a Licença MIT.

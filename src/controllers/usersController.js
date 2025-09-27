@@ -64,4 +64,32 @@ const deletarUsuário = async (req, res) => {
     }
 }
 
-module.exports = {criarUsuario, deletarUsuário, loginUsuario, atualizarDados};
+const logoutUsuario = async (req, res) => {
+    try {
+        req.user.tokens = req.user.tokens.filter((tokenObj) => {
+            return tokenObj.token !== req.token;
+        });
+
+        await req.user.save();
+        res.status(200).json({ mensagem: 'Logout bem-sucedido!' });
+    } catch (e) {
+        res.status(500).json({ erro: 'Falha ao fazer logout' });
+    }
+};
+
+const logoutAll = async (req, res) => {
+    try {
+        req.user.tokens = [];
+        
+        await req.user.save();
+        res.status(200).json({ mensagem: 'Logout de todos os dispositivos realizado com sucesso!' });
+    } catch (e) {
+        res.status(500).json({ erro: 'Falha ao fazer logout de todos os dispositivos' });
+    }
+};
+
+const verPerfil = async (req, res) => {
+    res.json(req.user);
+};
+
+module.exports = {criarUsuario, deletarUsuário, loginUsuario, atualizarDados, logoutUsuario, logoutAll, verPerfil};
