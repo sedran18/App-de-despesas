@@ -1,5 +1,4 @@
 const Transacao = require('../models/transacoes.js');
-const { loginUsuario } = require('./usersController.js');
 
 const criarTransacao = async (req, res)=> {
     const camposPermitidos = ['descricao', 'valor', 'tipo', 'categoria', 'data'];
@@ -43,7 +42,46 @@ const consultarReceitaDoUsuario = async (req, res) => {
             .limit(req.query.limit ? parseInt(req.query.limit) : 10)
             .skip(req.query.skip ? parseInt(req.query.skip) : 0).sort({date: -1});
 
-        res.json(transacoes);
+        const totalReceita = transacoes
+            .filter(t => t.tipo === 'receita')
+            .reduce((acc, t) => acc + t.valor, 0);
+
+        const totalDespesa = transacoes
+            .filter(t => t.tipo === 'despesa')
+            .reduce((acc, t) => acc + t.valor, 0);
+
+        // Percentual de gasto por categoria
+        const categorias = {};
+        transacoes.forEach(t => {
+            if (!categorias[t.categoria]) categorias[t.categoria] = 0;
+            categorias[t.categoria] += t.valor;
+        });
+
+        const porcentagemDeGastosPorCategoria = {};
+        const totalGastos = totalDespesa;
+     
+        if (totalGastos > 0) {
+            for (const cat in categorias) {
+                porcentagemDeGastosPorCategoria[cat] = ((categorias[cat] / totalGastos) * 100).toFixed(2);
+            }
+        } else {
+            for (const cat in categorias) {
+                porcentagemDeGastosPorCategoria[cat] = '0.00';
+            }
+        };
+
+
+        const saldo = totalReceita - totalDespesa;
+        res.json({
+            transacoes,
+            resumo: {
+                totalReceita,
+                totalDespesa,
+                porcentagemDeGastosPorCategoria,
+                saldo
+            }
+        });
+        
     } catch (err) {
         res.status(500).json({ erro: err.message});
     }
