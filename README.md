@@ -168,7 +168,9 @@ Remove token (enviado no header) da autenticação.
 Remove todos os tokens do usuário (Necessita autenticação).
 
 
-**Transações (Rota Protegida)**
+
+# Transações (Rota Protegida)
+
 
 Lembrando que todas as requisições tem que ser autenticada via token, adicionando Bearer <token> no header Authentication.
 
