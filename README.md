@@ -1,8 +1,6 @@
 
 # App de despesas
 
-![Logo do App de Despesas](./images/logo.png)
-
 Esta é uma API RESTful desenvolvida em Node.js para o gerenciamento de finanças pessoais. A aplicação permite que os usuários se cadastrem, autentiquem e controlem suas transações financeiras (receitas e despesas), obtendo resumos e análises sobre seus gastos.
 
 A API está disponível em:  
