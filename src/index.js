@@ -11,6 +11,10 @@ app.use(express.json());
 app.use('/api', users);
 app.use('/api', transacoes);
 
+app.get('/', (req, res) => {
+  res.send('🚀 API de Controle de Despesas está rodando!');
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => { //comente aqui para testar
     console.log(`http:localhost:${port}`); //comente aqui para testar
