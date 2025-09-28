@@ -1,7 +1,14 @@
 
 # App de despesas
 
+![Logo do App de Despesas](./images/logo.png)
+
 Esta é uma API RESTful desenvolvida em Node.js para o gerenciamento de finanças pessoais. A aplicação permite que os usuários se cadastrem, autentiquem e controlem suas transações financeiras (receitas e despesas), obtendo resumos e análises sobre seus gastos.
+
+A API está disponível em:  
+👉 [https://app-de-despesas.onrender.com](https://app-de-despesas.onrender.com)
+
+> Acesse o link acima para testar as rotas (ex.: `/api/users`, `/api/transacoes`).
 
 ## ✨ Funcionalidades Principais
 
@@ -119,6 +126,9 @@ Cria um novo usuário e retorna seus dados junto com um token de autenticação.
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
+
+![Criando user](./images/criando_user.gif)
+
 ```POST /api/users/login``` **- Login de usuário**
 
 Autentica um usuário existente e retorna um novo token.
